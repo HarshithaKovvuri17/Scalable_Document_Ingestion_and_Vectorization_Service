@@ -219,3 +219,5 @@ def _sanitize_metadata(metadata: Dict[str, Any]) -> Dict[str, Any]:
     return sanitized
 
 # Exception handling optimizations
+
+# Vector batch insertion helper method
