@@ -189,3 +189,5 @@ def process_document_task(self, document_data: Dict[str, Any]) -> Dict[str, Any]
             document_id, elapsed, exc, exc_info=True,
         )
         raise self.retry(exc=exc)
+
+# Exponential backoff retry policy
