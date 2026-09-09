@@ -209,3 +209,5 @@ class TestProcessDocumentTask:
 # Blank document validation tests
 
 # Validation edge cases
+
+# Connection retry tests
