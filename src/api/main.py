@@ -170,4 +170,4 @@ async def health_check():
 
 # Validation error override handler
 
-# Document ingestion endpoint
+# Task status polling handler
