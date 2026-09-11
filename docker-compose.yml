@@ -69,3 +69,5 @@ services:
 
 volumes:
   chroma_data:
+
+# Container healthchecks
