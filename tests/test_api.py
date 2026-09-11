@@ -169,4 +169,4 @@ class TestTaskStatusEndpoint:
             assert body["state"] == "FAILURE"
             assert body["error"] is not None
 
-# Task polling tests
+# Missing field validation tests
