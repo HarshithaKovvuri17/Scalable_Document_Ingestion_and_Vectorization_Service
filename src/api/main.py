@@ -170,4 +170,4 @@ async def health_check():
 
 # Validation error override handler
 
-# Task status polling handler
+# HTTP 400 validation error override
