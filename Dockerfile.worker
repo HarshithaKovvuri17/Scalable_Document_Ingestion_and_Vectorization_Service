@@ -1,0 +1,32 @@
+# ---------------------------------------------------------------------------
+# Dockerfile.worker – Celery worker service
+# ---------------------------------------------------------------------------
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        curl \
+        build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir --default-timeout=100 --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
+
+COPY src/__init__.py src/__init__.py
+COPY src/worker /app/src/worker
+COPY src/config /app/src/config
+COPY src/services /app/src/services
+COPY src/utils /app/src/utils
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    TRANSFORMERS_CACHE=/app/.cache/huggingface \
+    SENTENCE_TRANSFORMERS_HOME=/app/.cache/sentence_transformers
+
+# Pre-download embedding model at build time to eliminate cold-start latency
+ARG EMBEDDING_MODEL_NAME=all-MiniLM-L6-v2
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('${EMBEDDING_MODEL_NAME}')"
+
+CMD ["celery", "-A", "src.worker.tasks", "worker", "--loglevel=info", "--pool=prefork", "-c", "1"]
