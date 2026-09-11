@@ -1,0 +1,71 @@
+services:
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  chroma:
+    image: chromadb/chroma:0.5.15
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=true
+      - PERSIST_DIRECTORY=/chroma/chroma
+      - ANONYMIZED_TELEMETRY=false
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      CHROMA_HOST: chroma
+      CHROMA_PORT: 8000
+      CHROMA_COLLECTION_NAME: ${CHROMA_COLLECTION_NAME:-rag_document_embeddings}
+      EMBEDDING_MODEL_NAME: ${EMBEDDING_MODEL_NAME:-all-MiniLM-L6-v2}
+    depends_on:
+      redis:
+        condition: service_healthy
+      chroma:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+      args:
+        EMBEDDING_MODEL_NAME: ${EMBEDDING_MODEL_NAME:-all-MiniLM-L6-v2}
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      CHROMA_HOST: chroma
+      CHROMA_PORT: 8000
+      CHROMA_COLLECTION_NAME: ${CHROMA_COLLECTION_NAME:-rag_document_embeddings}
+      EMBEDDING_MODEL_NAME: ${EMBEDDING_MODEL_NAME:-all-MiniLM-L6-v2}
+    depends_on:
+      redis:
+        condition: service_healthy
+      chroma:
+        condition: service_started
+    command: celery -A src.worker.tasks worker --loglevel=info --pool=prefork -c 1
+    stop_grace_period: 30s
+
+volumes:
+  chroma_data:
