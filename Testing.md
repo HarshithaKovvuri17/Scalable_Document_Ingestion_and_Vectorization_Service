@@ -149,7 +149,7 @@ Check the execution status of a submitted Celery task using the `task_id` return
 
 ```powershell
 # Store the task_id returned from /ingest (do not include angle brackets < >)
-$taskId = "2aac03b3-af46-43f2-ac34-d70756d0c45f"
+$taskId = "your_task_id"
 Invoke-RestMethod -Uri "http://localhost:8000/task/$taskId" -Method Get
 
 # OR using curl.exe
@@ -162,7 +162,7 @@ HTTP/1.1 200 OK
 content-type: application/json
 
 {
-  "task_id": "2aac03b3-af46-43f2-ac34-d70756d0c45f",
+  "task_id": "your_task_id",
   "state": "SUCCESS",
   "result": {
     "status": "completed",
