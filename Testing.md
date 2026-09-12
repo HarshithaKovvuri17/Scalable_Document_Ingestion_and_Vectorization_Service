@@ -248,4 +248,4 @@ The Celery worker includes exponential backoff retry logic (`task_default_retry_
 - [x] **Validation Error Override**: Request validation failures return `400 Bad Request` instead of `422`.
 - [x] **Chunking & Vectorization**: Text is chunked into 500-character windows with 50-character overlap and embedded into 384-dimensional vectors stored in ChromaDB.
 
-<!-- Edge case PowerShell instructions -->
+<!-- Verification checklist updated -->
