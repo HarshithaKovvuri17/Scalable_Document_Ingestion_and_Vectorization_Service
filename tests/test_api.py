@@ -168,5 +168,3 @@ class TestTaskStatusEndpoint:
             body = client.get("/task/fail-task").json()
             assert body["state"] == "FAILURE"
             assert body["error"] is not None
-
-# Missing field validation tests

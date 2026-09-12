@@ -69,5 +69,3 @@ services:
 
 volumes:
   chroma_data:
-
-# Verified environment volume mounts

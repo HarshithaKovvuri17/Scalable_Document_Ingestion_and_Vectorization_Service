@@ -169,5 +169,3 @@ async def health_check():
     return {"status": "ok"}
 
 # Validation error override handler
-
-# HTTP 400 validation error override

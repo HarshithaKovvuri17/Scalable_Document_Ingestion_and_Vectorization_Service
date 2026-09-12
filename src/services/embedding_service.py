@@ -100,5 +100,3 @@ class EmbeddingService:
 # Model initialization caching
 
 # Model caching enhancement
-
-# Model caching enhancement

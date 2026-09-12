@@ -1585,5 +1585,3 @@ The use of batch processing, deterministic IDs, idempotent upserts, retry handli
 ```
 
 **This project forms the ingestion and vectorization foundation required before implementing semantic retrieval and the final RAG generation layer.**
-
-<!-- API curl examples -->

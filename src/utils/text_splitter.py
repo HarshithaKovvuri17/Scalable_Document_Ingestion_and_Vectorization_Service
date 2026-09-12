@@ -189,5 +189,3 @@ def split_text_recursive(
 # Optimized chunking logic
 
 # Optimized chunk overlap
-
-# Optimized chunk overlap
